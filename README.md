@@ -1,5 +1,5 @@
 
-<h1>Short Plataforme game in development 🐈</h1>
+<h1>Pequeño Juego de parkour en desarrollo 🐈</h1>
 
 DOWNLOAD <a href="https://drive.google.com/file/d/1pHVfrUf-ZweuLfvl0VK5QwEC9HumLu5q/view?usp=drive_link">HERE!!</a></h1>
 

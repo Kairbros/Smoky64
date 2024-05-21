@@ -16,6 +16,7 @@ var girarPersonajeVelocidad : int = 10
 @onready var particulasPasos = $Personaje/ParticulasCaminar
 @onready var pasosSonido = $Personaje/Pasos
 
+
 var correr : bool = false
 var aire : bool = false
 var salto : bool = false
@@ -30,6 +31,10 @@ var gravedad = ProjectSettings.get_setting("physics/3d/default_gravity") * 3
 func _ready():
 	velocidad = velocidadBase
 func _physics_process(delta):
+	var label = $Node2D/CanvasLayer/Label
+	var fps = Engine.get_frames_per_second()
+
+	label.text = str(fps)
 	_reload(delta)
 	_animaciones()
 
@@ -156,12 +161,12 @@ func _animaciones():
 					
 				if _movimiento() and !correr:
 					pasosSonido.pitch_scale = 0.7
-					$Personaje/ParticulasCaminar.scale_amount_min = 1
-					$Personaje/ParticulasCaminar.scale_amount_max = 1.5
+					particulasPasos.scale_amount_min = 1
+					particulasPasos.scale_amount_max = 1.5
 					animacion.play("Walk")
 				if _movimiento() and correr:
-					$Personaje/ParticulasCaminar.scale_amount_min = 1.5
-					$Personaje/ParticulasCaminar.scale_amount_max = 2
+					particulasPasos.scale_amount_min = 1.5
+					particulasPasos.scale_amount_max = 2
 					pasosSonido.pitch_scale = 1
 					animacion.play("Run")
 					

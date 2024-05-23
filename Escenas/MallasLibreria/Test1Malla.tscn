@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdoidhpqk3f0q"]
+
+[ext_resource type="Texture2D" uid="uid://1qrtlqk2d71s" path="res://Assets/Model/Niveles/GridTest/TextureTest.png" id="1_teci0"]
+[ext_resource type="ArrayMesh" uid="uid://bk25c5nqvywg2" path="res://Assets/Model/Niveles/GridTest/Grip1.obj" id="2_hquun"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pr5dq"]
+albedo_texture = ExtResource("1_teci0")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_wjcv1"]
+data = PackedVector3Array(-1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, 1, -0.0202, 1, -1, 1, 1, -1, 1, 1, 1, -0.0202, 1, -1, -0.0202, 1, -1, 1, 1, -1, -0.0202, 1, -1, 1, -1, -1, 1, -1, -1, -0.0202, 1, -1, -0.0202, -1, 1, -0.0202, -1, -1, -0.0202, -1, 1, -0.0202, 1, 1, -0.0202, 1, -1, -0.0202, -1, -1, -0.0202, 1, 1, 1, -1, 1, -0.0202, -1, 1, 1, 1, 1, 1, 1, 1, -0.0202, -1, 1, -0.0202, 1, -1, 1, -1, -1, -0.0202, -1, 1, 1, -1, 1, 1, -1, -1, -0.0202, -1, 1, -0.0202, -1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Grip1" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_pr5dq")
+mesh = ExtResource("2_hquun")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Grip1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grip1/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_wjcv1")

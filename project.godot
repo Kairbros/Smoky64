@@ -13,6 +13,7 @@ config_version=5
 config/name="Smoky64"
 run/main_scene="res://Escenas/Niveles/TestMap/TestMap.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
+run/max_fps=144
 config/icon="res://Logo.jpg"
 
 [autoload]

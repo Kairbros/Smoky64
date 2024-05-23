@@ -12,24 +12,42 @@ public partial class PlayerCs : CharacterBody3D
 	public int velocidadCorrer = 14;
 	[Export]
 	public float saltoFuerza = 10;
+	[Export]
+	public float friccion = 0.01f;
 	public float velocidad = 0;
-	public float gravedad = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle() * 4;
+	public float gravedad;
+	public Mapa mapa;
 	public Node3D rotador;
+	public Timer cronometro;
 	public AnimationPlayer animacion;
 	public Node3D modelo;
 	public Vector3 saltoEscala = new Vector3(0.8f,1.2f,0.8f);
 	public Vector3 desplazamientoDireccion = new Vector3(0,0,1);
+	public CpuParticles3D particulasCaminar;
+	public AudioStreamPlayer3D sonidoPasos;
+
 	public Boolean sePuedeDobleSalto;
 	public Boolean dobleSalto;
 	public Boolean desplazamiento;
 	public Boolean sePuedeDesplazamiento;
-	public CpuParticles3D particulasCaminar;
-	public AudioStreamPlayer3D sonidoPasos;
+	public Boolean golpe;
 	public Boolean sprint;
-	private AudioManager sfx;
+	public Boolean invulnerable;
+	public AnimationPlayer cara;
+	public AnimationPlayer efectos;
 
+	private AudioManager sfx;
+	public CollisionShape3D colision;
+
+	public Vector3 direccion;
     public override void _Ready()
     {	
+		mapa = GetParent<Mapa>();
+		cara = GetNode<AnimationPlayer>("Personaje/AnimacionCara");
+		efectos = GetNode<AnimationPlayer>("Personaje/AnimacionEfectos");
+		cronometro = GetNode<Timer>("Cronometro");
+		colision = GetNode<CollisionShape3D>("Colision");
+		gravedad = mapa.gravedad;
 		sfx = GetNode<AudioManager>("/root/AudioManager");
 		velocidad = velocidadBase;
 		sonidoPasos = GetNode<AudioStreamPlayer3D>("Personaje/Pasos");
@@ -40,6 +58,15 @@ public partial class PlayerCs : CharacterBody3D
     }
     public override void _Process(double delta)
 	{
+
+		if (desplazamiento)
+		{
+		colision.Rotation = new Vector3(modelo.Rotation.X  + 300,  modelo.Rotation.Y,modelo.Rotation.Z);
+		}
+		else
+		{
+		colision.Rotation = new Vector3(modelo.Rotation.X, modelo.Rotation.Y,modelo.Rotation.Z);
+		}
 		_movimiento(delta);
 		double fps = Engine.GetFramesPerSecond();
 
@@ -55,24 +82,40 @@ public partial class PlayerCs : CharacterBody3D
 		} 
 		_camara();
 		_animaciones();
+		_colisiones();
 	}
 
 	public void _movimiento(double delta){
+	
 		Vector3 velocity = Velocity;
+		
+
 		if (desplazamiento)
 		{
-
 			velocity = new Vector3(desplazamientoDireccion.X * velocidad, velocity.Y ,desplazamientoDireccion.Z * velocidad);
-			GD.Print(desplazamientoDireccion.Z * velocidad);
 		}
-		
+
+		if (!golpe)
+		{
+		if (IsOnFloor())
+				{
+					sePuedeDesplazamiento = true;
+					if(Input.IsActionJustPressed("space"))
+					{
+						desplazamiento = false;
+						sfx.salto.Play();
+						sfx.salto.PitchScale = 0.7f;
+						_JumpTween();
+						velocity.Y = saltoFuerza;
+						sePuedeDobleSalto = true;
+					}
+				}
 		if (!IsOnFloor())
 			{
 			if (sePuedeDobleSalto)
 			{
 				if(Input.IsActionJustPressed("space"))
-				{
-					
+				{	
 					desplazamiento = false;
 					sfx.salto.Play();
 					sfx.salto.PitchScale = 1f;
@@ -83,68 +126,92 @@ public partial class PlayerCs : CharacterBody3D
 				}
 			}
 			}
+		}
+
+			if (IsOnWall())
+			{
+				desplazamiento = false;
+
+				if (sprint)
+				{
+					velocidad = velocidadCorrer;
+				}
+				else
+				{
+					velocidad = velocidadBase;
+				}
+			}
 
 		if (!IsOnFloor())
 			{
 				velocity.Y -=  gravedad * (float)delta;
 			}
-			
-		if (!desplazamiento)
+		
+		if (!golpe)
 		{
-			if (!sprint)
+	
+			if (!desplazamiento)
 			{
-			velocidad = velocidadBase;
-			}
-			if (sprint)
-			{
-			velocidad = velocidadCorrer;
-			}
-
-			if (Input.IsActionJustPressed("shift") && sePuedeDesplazamiento)
-			{
-				sePuedeDesplazamiento = false;
-				velocidad = velocidadDesplazamiento;
-				sfx.salto.Play();
-				sfx.salto.PitchScale = 1f;
-				sePuedeDobleSalto = true;
-				desplazamiento = true;
-			}
-			
-			if (IsOnFloor())
-			{
-				sePuedeDesplazamiento = true;
-				if(Input.IsActionJustPressed("space"))
+				if (!sprint)
 				{
+				velocidad = velocidadBase;
+				}
+				if (sprint)
+				{
+				velocidad = velocidadCorrer;
+				}
+
+				if (Input.IsActionJustPressed("shift") && sePuedeDesplazamiento)
+				{
+					sePuedeDesplazamiento = false;
+
+					if (!sprint)
+					{
+					velocidad = velocidadDesplazamiento;
+					}
+					else
+					{
+					velocidad = velocidadDesplazamiento * 1.5f;
+					}
 					sfx.salto.Play();
-					sfx.salto.PitchScale = 0.7f;
-					_JumpTween();
-					velocity.Y = saltoFuerza;
+					sfx.salto.PitchScale = 1f;
 					sePuedeDobleSalto = true;
+					desplazamiento = true;
 				}
-			}
+				
+				direccion.X = Input.GetAxis("a", "d");
+				direccion.Z = Input.GetAxis("w", "s");
+				direccion = direccion.Rotated(Vector3.Up, rotador.Rotation.Y).Normalized();
+				if (direccion != Vector3.Zero)
+				{
+					desplazamientoDireccion = direccion;
 
-			
-			Vector3 direccion = Vector3.Zero;
-			direccion.X = Input.GetAxis("a", "d");
-			direccion.Z = Input.GetAxis("w", "s");
-			direccion = direccion.Rotated(Vector3.Up, rotador.Rotation.Y).Normalized();
-			if (direccion != Vector3.Zero)
-			{
-				desplazamientoDireccion = direccion;
-			}
-			velocity = new Vector3(direccion.X * velocidad, velocity.Y,direccion.Z * velocidad);
-			
-			if (IsOnFloor())
-			{
-				if (Input.IsActionJustPressed("mayus") && !sprint)
-				{
-					sprint = true;
-					return;
+					velocity.X = Mathf.Lerp(velocity.X, velocidad *direccion.X, friccion);
+					velocity.Z = Mathf.Lerp(velocity.Z, velocidad *direccion.Z, friccion);
 				}
-				if (Input.IsActionJustPressed("mayus") && sprint)
+				else
 				{
-					sprint = false;
-					return;
+					if (velocity != Vector3.Zero)
+					{
+						velocity.X -= velocity.X * friccion; 
+						velocity.Z -= velocity.Z * friccion; 
+					}
+				}
+			
+				
+				if (IsOnFloor())
+				{
+					dobleSalto = false;
+					if (Input.IsActionJustPressed("mayus") && !sprint)
+					{
+						sprint = true;
+						return;
+					}
+					if (Input.IsActionJustPressed("mayus") && sprint)
+					{
+						sprint = false;
+						return;
+					}
 				}
 			}
 		}
@@ -153,19 +220,34 @@ public partial class PlayerCs : CharacterBody3D
 		MoveAndSlide();
 	}
 	public void _camara(){
-		rotador.Position = new Vector3(this.Position.X, this.Position.Y + 2, this.Position.Z);
+		rotador.Position = new Vector3(this.Position.X, this.Position.Y + 1, this.Position.Z);
 	}
 	public async void _animaciones(){
 		
-		if (desplazamiento)
+		if (desplazamiento || golpe)
 		{
 			particulasCaminar.Emitting = false;
-				sonidoPasos.StreamPaused = true;
+			sonidoPasos.StreamPaused = true;
+		}
+
+		if (desplazamiento)
+		{
 			animacion.Play("Dash");
 			await ToSignal(animacion, "animation_finished");
 			desplazamiento = false;
 		}
-		if (!desplazamiento)
+
+		if (golpe)
+		{
+			invulnerable = true;
+			efectos.Play("Parpadeo");
+			animacion.Play("Hit");
+			await ToSignal(animacion, "animation_finished");
+			golpe = false;
+			
+
+		}
+		if (!desplazamiento || !golpe)
 		{
 			if (!IsOnFloor() && !dobleSalto)
 			{
@@ -182,7 +264,7 @@ public partial class PlayerCs : CharacterBody3D
 
 			if (IsOnFloor())
 			{
-				if (Velocity.X != 0 || Velocity.Z != 0)
+				if (direccion != Vector3.Zero)
 				{
 					particulasCaminar.Emitting = true;
 					sonidoPasos.StreamPaused = false;
@@ -210,12 +292,46 @@ public partial class PlayerCs : CharacterBody3D
 		}
 	
 	}
-
 	public void _JumpTween(){
 		Tween tween = GetTree().CreateTween();
-
 		tween.TweenProperty(this, "scale", saltoEscala, 0.1);
 		tween.TweenProperty(this, "scale", new Vector3(1f,1f,1f), 0.1);
 	}
+	public void _BlinkTween(){
+		Tween tween = GetTree().CreateTween();
+		tween.TweenProperty(this, "modulate", saltoEscala, 0.1);
+		tween.TweenProperty(this, "scale", new Vector3(1f,1f,1f), 0.1);
+	}
 	
+	public void Daño(String tipoEnemigo, Vector3 empujeEnemigo)
+	{
+		cronometro.Start();
+		golpe = true;
+		Velocity = Vector3.Zero; 
+		_JumpTween();
+		sfx.salto.Play();
+		sfx.salto.PitchScale = 0.4f ;
+		Velocity = new Vector3(empujeEnemigo.X * 1 , empujeEnemigo.Y, empujeEnemigo.Z* 1);
+		
+	}
+
+	public void Cronometro()
+	{
+		invulnerable = false;
+	}
+
+	public void _colisiones()
+
+	{
+		if (invulnerable)
+		{
+			CollisionLayer = 2;
+		}
+		else
+		{
+			efectos.Stop(); 
+			CollisionLayer = 1;
+		}
+	}
+
 }

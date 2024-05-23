@@ -1,13 +1,13 @@
 [gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cwrpcj3wr4r2r"]
 
-[ext_resource type="Texture2D" uid="uid://ce3v7boo2ev8l" path="res://Assets/Model/Smoik1.0/Player_Cara.png" id="1_5tree"]
+[ext_resource type="Texture2D" uid="uid://bbg6vsjxu2yjb" path="res://Assets/Imagenes/Original_Doge_meme.jpg" id="1_gxisl"]
 
 [resource]
 resource_name = "Material.003"
 cull_mode = 2
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_5tree")
-roughness = 0.5
+albedo_color = Color(1, 0.994191, 0.993187, 1)
+albedo_texture = ExtResource("1_gxisl")
 emission_enabled = true
 texture_filter = 2
 grow_amount = -0.436

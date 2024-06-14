@@ -1,7 +1,6 @@
 
 <h1>Smoky game🐈</h1>
 
-DOWNLOAD <a href="https://drive.google.com/file/d/1k4FRvYPK9zB_NfsZizdcFfqZssJ7N7vw/view?usp=sharing">HERE!!</a></h1>
 
 
 Fotitos: 🐱

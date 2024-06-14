@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bt5r308pbhntr"
+path="res://.godot/imported/Cabeza.obj-8be008e870fc0a9053f0aca7bac82d70.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Cabeza.obj-8be008e870fc0a9053f0aca7bac82d70.mesh"]
+
+source_file="res://ConstitucionEscena/Modelos/Cabeza.obj"
+dest_files=["res://.godot/imported/Cabeza.obj-8be008e870fc0a9053f0aca7bac82d70.mesh", "res://.godot/imported/Cabeza.obj-8be008e870fc0a9053f0aca7bac82d70.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

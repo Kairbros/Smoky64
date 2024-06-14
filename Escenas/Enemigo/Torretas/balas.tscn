@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://bahnt0gv1d57u"]
+
+[ext_resource type="Script" path="res://Scripts/C#/Enemigos/Torretas/Balas/Bala.cs" id="1_cxrov"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_wjmvy"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ndy6v"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2kdhl"]
+radius = 0.604333
+
+[node name="Balas" type="RigidBody3D"]
+collision_layer = 16384
+collision_mask = 513
+gravity_scale = 0.0
+script = ExtResource("1_cxrov")
+
+[node name="Malla" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_wjmvy")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ndy6v")
+
+[node name="Cronometro" type="Timer" parent="."]
+wait_time = 12.0
+autostart = true
+
+[node name="AreaDaño" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="Colision" type="CollisionShape3D" parent="AreaDaño"]
+shape = SubResource("SphereShape3D_2kdhl")
+
+[connection signal="timeout" from="Cronometro" to="." method="Timeout"]
+[connection signal="body_entered" from="AreaDaño" to="." method="AreaBody"]

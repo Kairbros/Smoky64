@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bm1hqybgiajgu"]
+
+[ext_resource type="Script" path="res://Scripts/AutoloadsScripts/AudioManager.cs" id="1_piu4y"]
+[ext_resource type="AudioStream" uid="uid://lnq3qyt6mylm" path="res://Assets/Audio/SFX/jump.ogg" id="1_rkf2p"]
+[ext_resource type="AudioStream" uid="uid://ku43j7stjo4l" path="res://Assets/Audio/SFX/HitCartoon.wav" id="3_s6xep"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_piu4y")
+
+[node name="JumpSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_rkf2p")
+volume_db = -15.0
+pitch_scale = 1.12
+
+[node name="GolpeSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_s6xep")
+volume_db = -15.0
+pitch_scale = 0.8
+
+[node name="DashSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_rkf2p")
+volume_db = -5.0
+pitch_scale = 1.8

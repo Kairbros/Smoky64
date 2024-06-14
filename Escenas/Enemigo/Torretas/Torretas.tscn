@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://ctkhvemvjfgcl"]
+
+[ext_resource type="Script" path="res://Scripts/C#/Enemigos/Torretas/Torretas.cs" id="1_htqv8"]
+[ext_resource type="ArrayMesh" uid="uid://chkd70qxowgel" path="res://ConstitucionEscena/Modelos/Base.obj" id="2_dipmq"]
+[ext_resource type="ArrayMesh" uid="uid://bt5r308pbhntr" path="res://ConstitucionEscena/Modelos/Cabeza.obj" id="3_wh4l3"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_gp14t"]
+radius = 39.9025
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u408p"]
+size = Vector3(2.64114, 1.88574, 1)
+
+[node name="Torretas" type="StaticBody3D" groups=["Enemigo"]]
+collision_layer = 16
+collision_mask = 529
+script = ExtResource("1_htqv8")
+
+[node name="Modelo" type="Node3D" parent="."]
+
+[node name="Base" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55285, -1.4261, 0.455444)
+mesh = ExtResource("2_dipmq")
+skeleton = NodePath("../..")
+
+[node name="Cabeza" type="MeshInstance3D" parent="Modelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55285, -1.4261, 0.455444)
+mesh = ExtResource("3_wh4l3")
+skeleton = NodePath("../..")
+
+[node name="Boca" type="Marker3D" parent="Modelo/Cabeza"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0664399, 1.93668, -3.84595)
+
+[node name="Area" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="Colision" type="CollisionShape3D" parent="Area"]
+shape = SubResource("SphereShape3D_gp14t")
+
+[node name="DetectorTerreno" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.257486, 0)
+collision_mask = 512
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.524124, -0.442871, 0)
+shape = SubResource("BoxShape3D_u408p")
+
+[node name="Cronometro" type="Timer" parent="."]
+wait_time = 0.05
+
+[node name="PuntoLuz" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.23844, -0.0222521)
+light_energy = 15.0
+omni_range = 52.0
+
+[connection signal="body_entered" from="Area" to="." method="AreaBody"]
+[connection signal="body_exited" from="Area" to="." method="AreaExit"]
+[connection signal="timeout" from="Cronometro" to="." method="Timeout"]

@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://mvpp4a33rku2"
+path="res://.godot/imported/Torretas.obj-03c4397a4abe4ffa8d1ae36f4d620664.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Torretas.obj-03c4397a4abe4ffa8d1ae36f4d620664.mesh"]
+
+source_file="res://ConstitucionEscena/Modelos/Torretas.obj"
+dest_files=["res://.godot/imported/Torretas.obj-03c4397a4abe4ffa8d1ae36f4d620664.mesh", "res://.godot/imported/Torretas.obj-03c4397a4abe4ffa8d1ae36f4d620664.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

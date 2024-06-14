@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://j0arukeynrnc"]
+
+[sub_resource type="Gradient" id="Gradient_vm7hi"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_e557f"]
+gradient = SubResource("Gradient_vm7hi")
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(962.5, 544.75)
+scale = Vector2(7.55859, 1090.5)
+texture = SubResource("GradientTexture1D_e557f")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 526.0
+offset_top = 467.0
+offset_right = 1775.0
+offset_bottom = 758.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_font_sizes/normal_font_size = 150
+text = "GAME OVER"
